@@ -18,3 +18,5 @@ jobs:
           terraform init
           terraform plan
           terraform apply -auto-approve
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
