@@ -43,3 +43,46 @@ resource "github_repository" "books" {
   vulnerability_alerts   = true
   allow_update_branch    = true
 }
+
+
+resource "github_repository_ruleset" "books-master-ruleset" {
+  for_each    = local.books
+  name        = "master"
+  repository  = github_repository.books[each.key].name
+  target      = "branch"
+  enforcement = "active"
+
+  conditions {
+    ref_name {
+      include = ["~DEFAULT_BRANCH"]
+      exclude = []
+    }
+  }
+
+  rules {
+    deletion         = true
+    non_fast_forward = true
+    pull_request {
+
+    }
+    required_status_checks {
+      strict_required_status_checks_policy = true
+      required_check {
+        context        = "build"
+        integration_id = 15368
+      }
+      required_check {
+        context        = "CodeQL"
+        integration_id = 57789
+      }
+    }
+    required_code_scanning {
+      required_code_scanning_tool {
+        alerts_threshold          = "errors"
+        security_alerts_threshold = "high_or_higher"
+        tool                      = "CodeQL"
+
+      }
+    }
+  }
+}
