@@ -36,7 +36,20 @@ resource "github_repository_ruleset" "np-complete-infra-master-ruleset" {
     required_status_checks {
       strict_required_status_checks_policy = true
       required_check {
-        context = "tflint"
+        context        = "tflint"
+        integration_id = 15368
+      }
+      required_check {
+        context        = "CodeQL"
+        integration_id = 57789
+      }
+    }
+    required_code_scanning {
+      required_code_scanning_tool {
+        alerts_threshold          = "errors"
+        security_alerts_threshold = "high_or_higher"
+        tool                      = "CodeQL"
+
       }
     }
   }
