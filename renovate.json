@@ -1,6 +1,38 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
-  ]
+    "config:best-practices",
+    ":separateMajorReleases",
+    ":combinePatchMinorReleases",
+    ":prImmediately",
+    ":label(dependencies)"
+  ],
+  "rangeStrategy": "pin",
+  "timezone": "Asia/Tokyo",
+  "schedule": ["at any time"],
+  "minimumReleaseAge": "3 days",
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "github-actions"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "groupName": "terraform"
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "groupName": "security-updates"
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true,
+    "schedule": ["before 5am on monday"]
+  }
 }
